@@ -1,0 +1,40 @@
+export("randOU")
+export("logpdfOU")
+export("randsplit")
+export("infer.timedeppar")
+export("readres.timedeppar")
+export("get.label")
+export("plot.timedeppar")
+
+S3method("plot","timedeppar")
+
+export("get.param")
+S3method("get.param","timedeppar")
+
+export("get.parsamp")
+S3method("get.parsamp","timedeppar")
+
+export("calc.acceptfreq")
+S3method("calc.acceptfreq","timedeppar")
+
+export("calc.logpdf")
+S3method("calc.logpdf","timedeppar")
+
+importFrom("utils",
+           "packageDate",
+           "packageVersion")
+
+importFrom("mvtnorm",
+           "rmvnorm")
+
+importFrom("stats",
+           "dunif","runif",
+           "dnorm","pnorm","rnorm",
+           "var","cov","cor","cov2cor",
+           "density","quantile","approx")
+
+importFrom("graphics",
+           "abline","par","plot","pairs","lines","points","polygon","text","mtext","legend")
+
+importFrom("grDevices",
+           "grey","rainbow","heat.colors","topo.colors","terrain.colors","adjustcolor")
