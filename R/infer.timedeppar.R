@@ -150,13 +150,13 @@
 #' @param  control              list of control parameters of the algorithm:
 #'                              \itemize{
 #'                              \item
-#'                              \code{n.interval}: number of sub-intervals in which the time domain is splitted
-#'                                                 to infer the time-dependent parameter; either scalar for universal
+#'                              \code{n.interval}: number of sub-intervals into which the time domain is splitted
+#'                                                 to infer the time-dependent parameters; either scalar for universal
 #'                                                 choice for all parameters or named vector for parameter-specific
-#'                                                 choicees
+#'                                                 choices
 #'                                                 (default value: 50; this number must be increased if the acceptance
-#'                                                 rate of the time-dependent parameter is very low, it can be decreased
-#'                                                 if it is high);
+#'                                                 rates of the time-dependent parameters are very low, it can be decreased
+#'                                                 if they are high);
 #'                              \item
 #'                              \code{min.internal}: minimum number of internal points in an interval 
 #'                                                  (default value: 1; may be increased if time resolution is high).
@@ -169,6 +169,7 @@
 #'                                                                        where the acceptance frequency is low;
 #'                                                  \code{"autoweights"}: use weighted random split but adjusts weights 
 #'                                                                        adaptively.
+#'                                                  (default value: \code{"modunif"}).
 #'                              \item
 #'                              \code{interval.weights}: numerical vector or named list of numerical vectors 
 #'                                                       (by time-dependent parameter) of weights for sampling interval 
@@ -326,6 +327,17 @@
 #'         \item
 #'         \code{sys.time}: run time used for the previous inference job.
 #'         }
+#'         
+#' @seealso
+#' 
+#' \code{\link{plot.timedeppar}} for visualizing results.\cr
+#' \code{\link{calc.acceptfreq}} for calculating (apparent) acceptance frequencies.\cr
+#' \code{\link{calc.logpdf}} for calculating log pdf values (prior, internal, posterior) from the results.\cr
+#' \code{\link{get.param}} for extracting individual parameters from the Markov chain.\cr
+#' \code{\link{get.parsamp}} for extracting subsamples of the Markov chain.\cr
+#' \code{\link{readres.timedeppar}} for reading saved results from a previous run.\cr
+#' \code{\link{randOU}} for sampling from an Ornstein-Uhlenbeck process.\cr
+#' \code{\link{logpdfOU}} for calculating the probability density of a sample from an Ornstein-Uhlenbeck process.
 #' 
 #' @references 
 #' Reichert, P.
@@ -936,6 +948,11 @@ infer.timedeppar <- function(loglikeli            = NULL,
             vol.new <- sqrt(prod(diag(cov.prop.ou[[i]])))  # expect to be more robust without considering correlation
             scale.prop.ou[i] <- res.infer.timedeppar$scale.prop.ou[i] * (vol.old/vol.new)^(1/nrow(cov.prop.ou[[i]])) 
           }
+          else
+          {
+            cov.prop.ou[[i]] <- matrix(nrow=0,ncol=0)
+            scale.prop.ou[i] <- res.infer.timedeppar$scale.prop.ou 
+          }
         }
       }
     }
@@ -1260,16 +1277,19 @@ infer.timedeppar <- function(loglikeli            = NULL,
     }
     for ( i in 1:length(ind.timedeppar) )
     {
-      if ( verbose > 0 )
+      if ( length(ind.oupar[[i]]) > 0 )
       {
-        cat("* proposal distribution of process parameters of time-dependent parameter",param.names[ind.timedeppar[i]],":\n")
-        cat("correlation matrix:\n")
-        print(cov2cor(cov.prop.ou[[i]]))
-        cat("standard deviations:\n")
-        print(sqrt(diag(cov.prop.ou[[i]])))
-        if ( param.log.loc[param.names[ind.timedeppar[i]]]) cat("logarithmic Ornstein-Uhlenbeck process\n")
-        else                                                cat("non-logarithmic Ornstein-Uhlenbeck process\n")
-        cat("scaling factor:\n",scale.prop.ou[i],"\n")
+        if ( verbose > 0 )
+        {
+          cat("* proposal distribution of process parameters of time-dependent parameter",param.names[ind.timedeppar[i]],":\n")
+          cat("correlation matrix:\n")
+          print(cov2cor(cov.prop.ou[[i]]))
+          cat("standard deviations:\n")
+          print(sqrt(diag(cov.prop.ou[[i]])))
+          if ( param.log.loc[param.names[ind.timedeppar[i]]]) cat("logarithmic Ornstein-Uhlenbeck process\n")
+          else                                                cat("non-logarithmic Ornstein-Uhlenbeck process\n")
+          cat("scaling factor:\n",scale.prop.ou[i],"\n")
+        }
       }
     }
   }

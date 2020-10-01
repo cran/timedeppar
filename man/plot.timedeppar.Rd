@@ -24,7 +24,8 @@
 \arguments{
 \item{x}{results from the function \code{\link{infer.timedeppar}} of class \code{timedeppar} or
 list of such results for comparing multiple chains (in the latter case you have to call
-explicitly \code{plot.timedeppar}.}
+explicitly \code{plot.timedeppar} rather than being able to do the generic call \code{plot}
+as the list of results is not an object of class \code{timedeppar}).}
 
 \item{type}{vector of plot types:\cr
 \code{"traces"} or \code{"marginals"}: traces and 1d marginals of Markov chains of 

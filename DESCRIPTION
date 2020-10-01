@@ -1,8 +1,8 @@
 Package: timedeppar
 Type: Package
 Title: Infer Constant and Stochastic, Time-Dependent Model Parameters
-Version: 1.0
-Date: 2020-07-07
+Version: 1.0.1
+Date: 2020-09-30
 Author: Peter Reichert <peter.reichert@eawag.ch> 
 Maintainer: Peter Reichert <peter.reichert@eawag.ch>
 Description: Infer constant and stochastic, time-dependent parameters to consider intrinsic stochasticity of a dynamic model and/or to analyze model structure modifications that could reduce model deficits.
@@ -16,10 +16,10 @@ Description: Infer constant and stochastic, time-dependent parameters to conside
 License: GPL-3
 Depends: mvtnorm
 URL: https://gitlab.com/p.reichert/timedeppar
-BugReports: https://gitlab.com/p.reichert/timedeppar/issues
+BugReports: https://gitlab.com/p.reichert/timedeppar/-/issues
 Encoding: UTF-8
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
 NeedsCompilation: no
-Packaged: 2020-07-07 19:23:30 UTC; reichert
+Packaged: 2020-10-01 07:43:38 UTC; reichert
 Repository: CRAN
-Date/Publication: 2020-07-08 08:40:02 UTC
+Date/Publication: 2020-10-01 08:00:02 UTC

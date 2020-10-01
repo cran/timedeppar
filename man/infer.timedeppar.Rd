@@ -186,13 +186,13 @@ convergence.}
 \item{control}{list of control parameters of the algorithm:
 \itemize{
 \item
-\code{n.interval}: number of sub-intervals in which the time domain is splitted
-                   to infer the time-dependent parameter; either scalar for universal
+\code{n.interval}: number of sub-intervals into which the time domain is splitted
+                   to infer the time-dependent parameters; either scalar for universal
                    choice for all parameters or named vector for parameter-specific
-                   choicees
+                   choices
                    (default value: 50; this number must be increased if the acceptance
-                   rate of the time-dependent parameter is very low, it can be decreased
-                   if it is high);
+                   rates of the time-dependent parameters are very low, it can be decreased
+                   if they are high);
 \item
 \code{min.internal}: minimum number of internal points in an interval 
                     (default value: 1; may be increased if time resolution is high).
@@ -205,6 +205,7 @@ convergence.}
                                           where the acceptance frequency is low;
                     \code{"autoweights"}: use weighted random split but adjusts weights 
                                           adaptively.
+                    (default value: \code{"modunif"}).
 \item
 \code{interval.weights}: numerical vector or named list of numerical vectors 
                          (by time-dependent parameter) of weights for sampling interval 
@@ -436,4 +437,14 @@ A smoothing algorithm for estimating stochastic, continuous-time model parameter
 and its application to a simple climate model. 
 \emph{Journal of the Royal Statistical Society: Series C (Applied Statistics)} 58, 679-704, 2009. 
 \url{https://doi.org/10.1111/j.1467-9876.2009.00678.x}
+}
+\seealso{
+\code{\link{plot.timedeppar}} for visualizing results.\cr
+\code{\link{calc.acceptfreq}} for calculating (apparent) acceptance frequencies.\cr
+\code{\link{calc.logpdf}} for calculating log pdf values (prior, internal, posterior) from the results.\cr
+\code{\link{get.param}} for extracting individual parameters from the Markov chain.\cr
+\code{\link{get.parsamp}} for extracting subsamples of the Markov chain.\cr
+\code{\link{readres.timedeppar}} for reading saved results from a previous run.\cr
+\code{\link{randOU}} for sampling from an Ornstein-Uhlenbeck process.\cr
+\code{\link{logpdfOU}} for calculating the probability density of a sample from an Ornstein-Uhlenbeck process.
 }
