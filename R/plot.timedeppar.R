@@ -69,13 +69,13 @@ plot.timedeppar <- function(x,type=c("traces","marginals","summary","pairs","tim
   # -------------------
   
   res <- x
-  if ( class(res[[1]]) != "timedeppar" ) res <- list(res)
+  if ( ! inherits(res[[1]],"timedeppar") ) res <- list(res)
 
   # check input:
   
   for ( i in 1:length(res) )
   {
-    if ( class(res[[i]]) != "timedeppar" )
+    if ( ! inherits(res[[i]],"timedeppar") )
     {
       warning("first argument must be of class timedeppar or a list of objects of class timedeppar")
       return()

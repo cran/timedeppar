@@ -15,7 +15,7 @@ calc.acceptfreq.timedeppar <- function(x,n.burnin=0)
   
   # check input:
   
-  if ( class(res) != "timedeppar" )
+  if ( ! inherits(res,"timedeppar") )
   {
     warning("argument not of class timedeppar")
     return()

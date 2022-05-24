@@ -1,3 +1,12 @@
+### R package timedeppar version 1.0.2 (2022-05-24)
+
+List of changes:
+
+- Corrected example (log=TRUE in dnorm)
+- Extended example to also infer obs_sd
+- Added plot with data to example
+
+
 ### R package timedeppar version 1.0.1 (2020-09-30)
 
 List of changes:

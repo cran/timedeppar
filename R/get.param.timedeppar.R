@@ -32,7 +32,7 @@ get.param <- function(x,ind.sample) UseMethod("get.param")
 get.param.timedeppar <- function(x,ind.sample=NA)
 {
   res <- x
-  if ( class(res) != "timedeppar" )
+  if ( ! inherits(res,"timedeppar") )
   {
     warning("the first argument or get.param.timedeppar must be of class timedeppar")
     return(NA)

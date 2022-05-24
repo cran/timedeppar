@@ -45,7 +45,7 @@ get.parsamp.timedeppar <- function(x,samp.size=1000,n.burnin=0,times.new=numeric
   
   # check input:
   
-  if ( class(res) != "timedeppar" )
+  if ( ! inherits(res,"timedeppar") )
   {
     warning("get.parsamp.timedeppar: the first argument must be of class timedeppar")
     return(NA)

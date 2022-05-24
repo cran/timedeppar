@@ -378,65 +378,102 @@ The Ornstein-Uhlenbeck processes of time-dependent processes are characterized b
 standard deviation (\code{sd}), and a rate parameter (\code{gamma}) that quantifies temporal correlation.
 }
 \examples{
-# re-infer an artificially produced Ornstein-Uhlenbeck process with noise
-# (didactical example for package use; increase length of chain for convergence)
+# Simple example for re-inferring parameters of an Ornstein-Uhlenbeck process
+# with observational noise from synthetically generated data
+# ---------------------------------------------------------------------------
 
-# generate data:
+# load package:
+if ( !require("timedeppar") ) { install.packages("timedeppar"); library(timedeppar) }
 
+# choose model parameters:
+y_mean      <-  0
+y_sd        <-  1
+y_gamma     <- 10
+obs_sd      <-  0.2
+
+# choose control parameters of numerical algorithm:
+n.iter      <-   100   # this is just to demonstrate how it works and is compatible
+# with the computation time requirements for examples in CRAN
+# n.iter      <- 50000   # please go for a sample size like this
+#                        # for getting a reasonable sample
+n.interval  <-    25   # increase if rejection frequency of stoch. par. too high
+fract.adapt <- 0.4
+n.adapt     <- floor(fract.adapt*n.iter)
+
+# synthetically generate data:
 set.seed(123)
-data  <- randOU(mean=0,sd=1,gamma=10,t=seq(from=0,to=2,length.out=101)) 
-data$yobs <- data$y + rnorm(nrow(data),mean=0,sd=0.2)
+data <- randOU(mean=y_mean,sd=y_sd,gamma=y_gamma,t=seq(from=0,to=2,length.out=101))
+data$yobs <- data$y + rnorm(nrow(data),mean=0,sd=obs_sd)
 
 # define observational likelihood:
-
 loglikeli <- function(param,data)
 {
-  # get parameter y at time points of observations::
-  
-  y <- param$y
-  if ( is.matrix(y) | is.data.frame(y) ) y <- approx(x=y[,1],y=y[,2],xout=data[,1])$y
-  
-  # calculate likelihood:
-  loglikeli <- sum(dnorm(data[,"yobs"],mean=y,sd=0.2))
-  
-  # return result:
-  return(loglikeli)
+ # get parameter y at time points of observations::
+ y <- param$y
+ if ( is.matrix(y) | is.data.frame(y) ) y <- approx(x=y[,1],y=y[,2],xout=data[,1])$y
+ # calculate likelihood:
+ loglikeli <- sum(dnorm(data[,"yobs"],mean=y,sd=param$obs_sd,log=TRUE))
+ # return result:
+ return(loglikeli)
 }
 
-# do a few MCMC steps for inference of y and epsilon for didactical purpose
-# (much longer chains would be needed for convergence, try n.iter=10000, n.adapt=2000):
-
+# sample from the posterior of y, mu_y, sd_y and sd_obs assuming a uniform prior:
 res <- infer.timedeppar(loglikeli      = loglikeli,
-                        param.ini      = list(y=data[,1:2]),
-                        param.ou.ini   = c(y_mean=0,y_sd=1),
-                        param.ou.fixed = c(y_gamma=10),
-                        n.iter         = 150,
-                        control        = list(n.interval = 10,
-                                              n.adapt    = 75),
-                        data           = data)
+                       param.ini      = list(y=randOU(mean=y_mean,sd=y_sd,gamma=y_gamma,
+                                                      t=seq(from=0,to=2,length.out=501)),
+                                             obs_sd=obs_sd),
+                       param.log      = c(y=FALSE,obs_sd=TRUE),
+                       param.ou.ini   = c(y_mean=0,y_sd=1),
+                       param.ou.fixed = c(y_gamma=10),
+                       n.iter         = n.iter,
+                       control        = list(n.interval = n.interval,
+                                             n.adapt    = n.adapt),
+                       data = data)
 
+# plot results using pre-defined options:
+# pdf(paste0("infer_OU_",n.iter,"_",n.adapt,"_original.pdf"),width=8,height=12)
 plot(res,
-     labels=expression(y       = y,
-                       y_mean  = mu[y],
-                       y_sd    = sigma[y],
-                       y_gamma = gamma[y]))
+    labels=expression(y       = y,
+                      y_mean  = mu[y],
+                      y_sd    = sigma[y],
+                      y_gamma = gamma[y]))
+# dev.off()
+
+# plot time series and data:
+# pdf(paste0("infer_OU_",n.iter,"_",n.adapt,"_comparison.pdf"),width=8,height=6)
+t <- res$sample.param.timedep$y[1,]
+sample <- res$sample.param.timedep$y[(1+n.adapt+1):nrow(res$sample.param.timedep$y),]
+q <- apply(sample,2,quantile,probs=c(0.025,0.5,0.975))
+plot(numeric(0),numeric(0),type="n",xaxs="i",yaxs="i",
+    xlim=range(t),ylim=2.5*c(-1,1),xlab="t",ylab="y")
+polygon(c(t,rev(t),t[1]),c(q[1,],rev(q[3,]),q[1,1]),
+       col="grey80",border=NA)
+lines(t,q[2,])
+lines(data$t,data$y,col="red")
+points(data$t,data$yobs,pch=19,cex=0.8)
+legend("bottomright",
+      legend=c("original process","noisy data","inferred median","inferred 95\% range"),
+      lwd=c(1,NA,1,5),lty=c("solid",NA,"solid","solid"),col=c("red","black","black","grey80"),
+      pch=c(NA,19,NA,NA),cex=0.8)
+# dev.off()
 }
 \references{
 Reichert, P.
 timedeppar: An R package for inferring stochastic, time-dependent model parameters
 in preparation, 2020.\cr\cr
 Reichert, P., Ammann, L. and Fenicia, F.
-Potential and challenges of investigating intrinsic uncertainty of hydrological models with stochastic, time-dependent parameters.
-in preparation, 2020.\cr\cr
+Potential and challenges of investigating intrinsic uncertainty of hydrological models with time-dependent, stochastic parameters.
+\emph{Water Resources Research} 57(8), e2020WR028311, 2021.
+\doi{10.1029/2020WR028311}\cr\cr
 Reichert, P. and Mieleitner, J. 
 Analyzing input and structural uncertainty of nonlinear dynamic models with stochastic, time-dependent parameters. 
 \emph{Water Resources Research}, 45, W10402, 2009. 
-\url{https://doi.org/10.1029/2009WR007814}\cr\cr
+\doi{10.1029/2009WR007814}\cr\cr
 Tomassini, L., Reichert, P., Kuensch, H.-R. Buser, C., Knutti, R. and Borsuk, M.E. 
 A smoothing algorithm for estimating stochastic, continuous-time model parameters 
 and its application to a simple climate model. 
 \emph{Journal of the Royal Statistical Society: Series C (Applied Statistics)} 58, 679-704, 2009. 
-\url{https://doi.org/10.1111/j.1467-9876.2009.00678.x}
+\doi{10.1111/j.1467-9876.2009.00678.x}
 }
 \seealso{
 \code{\link{plot.timedeppar}} for visualizing results.\cr

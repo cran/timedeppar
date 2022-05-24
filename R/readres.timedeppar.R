@@ -16,6 +16,6 @@ readres.timedeppar <- function(file)
   if ( ! file.exists(file) ) { warning(paste("readres.timedeppar: file",file,"not found")); return(list()) }
   load(file,envir=env.res)
   if ( ! "res" %in% names(env.res) ) { warning("readres.timedeppar: no results found"); return(list()) }
-  if ( class(env.res$res) != "timedeppar" ) { warning("readres.timedeppar: no results found"); return(list()) }
+  if ( ! inherits(env.res$res,"timedeppar") ) { warning("readres.timedeppar: no results found"); return(list()) }
   return(env.res$res)
 }
