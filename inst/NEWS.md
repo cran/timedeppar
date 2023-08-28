@@ -1,3 +1,10 @@
+### R package timedeppar version 1.0.3 (2023-08-28)
+
+List of changes:
+
+- Updated maintainer email address
+
+
 ### R package timedeppar version 1.0.2 (2022-05-24)
 
 List of changes:

@@ -1,10 +1,10 @@
 Package: timedeppar
 Type: Package
 Title: Infer Constant and Stochastic, Time-Dependent Model Parameters
-Version: 1.0.2
-Date: 2022-05-24
-Author: Peter Reichert <peter.reichert@eawag.ch> 
-Maintainer: Peter Reichert <peter.reichert@eawag.ch>
+Version: 1.0.3
+Date: 2023-08-28
+Author: Peter Reichert <peter.reichert@emeriti.eawag.ch> 
+Maintainer: Peter Reichert <peter.reichert@emeriti.eawag.ch>
 Description: Infer constant and stochastic, time-dependent parameters to consider intrinsic stochasticity of a dynamic model and/or to analyze model structure modifications that could reduce model deficits.
   The concept is based on inferring time-dependent parameters as stochastic processes in the form of Ornstein-Uhlenbeck processes jointly with inferring constant model parameters and parameters of the Ornstein-Uhlenbeck processes.
   The package also contains functions to sample from and calculate densities of Ornstein-Uhlenbeck processes.
@@ -18,8 +18,8 @@ Depends: mvtnorm
 URL: https://gitlab.com/p.reichert/timedeppar
 BugReports: https://gitlab.com/p.reichert/timedeppar/-/issues
 Encoding: UTF-8
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.3
 NeedsCompilation: no
-Packaged: 2022-05-24 12:24:27 UTC; reichert
+Packaged: 2023-08-28 10:10:39 UTC; peter
 Repository: CRAN
-Date/Publication: 2022-05-24 23:40:02 UTC
+Date/Publication: 2023-08-28 10:50:02 UTC
